@@ -46,7 +46,7 @@ main_block: BEGIN
     WHERE from_account = p_from_account
       AND DATE(created_at) = CURDATE();
 
-    IF (v_daily_total + p_amount) > 50000 THEN
+    IF (v_daily_total + p_amount) > 50000 THEN  
         INSERT INTO transaction_logs (
             transaction_id, account_id, attempted_amount, status, reason
         ) VALUES (NULL, p_from_account, p_amount, 'FAILED','DAILY LIMIT REACHED');
@@ -57,7 +57,7 @@ main_block: BEGIN
     END IF;
 
     -- FRAUD DETECTION 2: UNUSUAL AMOUNT (Sudden high amount)
-    IF p_amount > (v_balance * 0.8) THEN
+    IF p_amount > (v_balance * 2.0) THEN
         INSERT INTO transaction_logs (
             transaction_id, account_id, attempted_amount, status, reason
         ) VALUES (NULL, p_from_account, p_amount, 'FLAGGED','UNUSUAL ACTIVITY');
